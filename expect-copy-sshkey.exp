@@ -1,0 +1,38 @@
+#!/usr/bin/expect
+##############################################################
+#version 0.1 
+#hukang 2019/2/4 QQ:2859450898 Email:2859450898@qq.com
+#作用:
+#使用简介:
+##############################################################
+
+
+if { $argc != 4} {
+    send_user "usage:expect expect-copy-sshkey.exp file host port user \n"
+    exit
+}
+
+#define var
+set file [lindex $argv 0]
+set host [lindex $argv 1]
+set port [lindex $argv 2]
+set user [lindex $argv 3]
+set password "yumen~1243"
+
+
+#spawn ssh-copy-id -i $file "-p 52113 oldboy@172.16.2.$host"这里172.16.2是多余的了
+spawn ssh-copy-id -i $file "-p $port ${user}@$host"
+
+
+expect {
+
+    "yes/no" {send "yes\r";exp_continue}
+    "*password" {send "$password\r"}
+   
+}
+
+expect eof
+
+exit -onexit {
+    send_user "oldboy say goodbye to you!\n"
+}
